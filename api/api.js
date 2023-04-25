@@ -6,6 +6,8 @@ const cors = require('cors');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 
+
+
 const passport = require("./services/passport.js");
 const Route = require("./routes/Routes.js");
 
@@ -13,6 +15,13 @@ const Route = require("./routes/Routes.js");
 const app = express();
 
 const port = 4000;
+
+
+
+app.use(cors({
+    credentials: true,
+    origin: true,
+}));
 
 app.use(session({
     secret: process.env.SECRET,
@@ -27,10 +36,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors({
-    credentials: true,
-    origin: true,
-}));
 
 app.use(express.json());
 
@@ -38,6 +43,7 @@ app.use(express.json());
 
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.use('/uploads', express.static(__dirname + "/uploads"));
 
 app.use(Route);
 

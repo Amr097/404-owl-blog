@@ -5,7 +5,7 @@ const {User} = require("../models/User");
 passport.use(User.createStrategy());
 
 passport.serializeUser((user, done) => {
-    //console.log(user._id)
+    console.log(user._id)
     done(null, user._id);
   });
 
