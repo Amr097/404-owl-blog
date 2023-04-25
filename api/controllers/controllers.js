@@ -50,8 +50,16 @@ res.json(req.isAuthenticated());
 
 const profileController = async (req,res)=>{
   try{
-   const user = await User.findById(req.user.id)
-    res.json({state: req.isAuthenticated(), user: user});
+       
+    if(req.user){
+      const user = await User.findById(req.user.id)
+      res.json({state: req.isAuthenticated(), user: user});
+  }
+  
+  else{
+    res.json({state: req.isAuthenticated()})
+  }
+
   }
   catch(err){
     console.log(err)
@@ -77,22 +85,25 @@ const submitController = async (req,res)=>{
 }
 
 const feedController = async (req,res)=>{
+  const state = req.isAuthenticated();
+  //console.log(req.user);
   const posts = await Post.find({})
   .populate('author', ['username'])
   .sort({createdAt:-1}).
   limit(20);
   //console.log(req.user);
-  res.json(posts);
+  res.json({posts, state: state, user: req.user});
 }
 
 const getPostController = async (req,res)=>{
   if(req.isAuthenticated){
+    const state= req.isAuthenticated();
     const id = req.params.id
 const findPost = await Post.findById(id);
 const post = await findPost.populate('author', ['username'])
    
    
-   res.json(post);
+   res.json({post, state});
   }
 }
 
@@ -122,7 +133,7 @@ if(post.author._id.toString() === req.user.id){
   }
   
 }
-console.log(post.author._id.toString())
+//console.log(post.author._id.toString())
 
 
 }
