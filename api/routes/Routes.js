@@ -11,7 +11,8 @@ const {
     submitController,
     feedController,
     getPostController,
-    updateController } = require("../controllers/Controllers");
+    updateController,
+    deleteController } = require("../controllers/Controllers");
 
 const router = express.Router();
 
@@ -31,5 +32,7 @@ router.get('/feed', feedController);
 router.get('/post/:id', getPostController);
 
 router.patch('/update', upload.single('file'), updateController);
+
+router.delete('/delete/:id', deleteController);
 
 module.exports= router;

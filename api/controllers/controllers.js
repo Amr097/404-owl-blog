@@ -99,11 +99,15 @@ const getPostController = async (req,res)=>{
   if(req.isAuthenticated){
     const state= req.isAuthenticated();
     const id = req.params.id
-const findPost = await Post.findById(id);
-const post = await findPost.populate('author', ['username'])
+    const findPost = await Post.findById(id);
+  if(findPost){
+  const post = await findPost.populate('author', ['username']);
+  res.json({post, state});
+  }
+
    
    
-   res.json({post, state});
+   
   }
 }
 
@@ -138,6 +142,16 @@ if(post.author._id.toString() === req.user.id){
 
 }
 
+
+const deleteController= async (req,res)=>{
+  await Post.findById(req.params.id).then(post=>{
+    if(post){
+      post.deleteOne({id: req.params.id})
+    }
+  })
+  res.json('done');
+}
+
 module.exports={
   registerController,
   loginController,
@@ -146,5 +160,6 @@ module.exports={
   submitController,
   feedController ,
   getPostController,
-  updateController
+  updateController,
+  deleteController
 };
