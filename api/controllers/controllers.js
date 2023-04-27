@@ -24,18 +24,15 @@ const registerController=  (req,res)=>{
 } 
 
 const loginController = (req,res)=>{
- // res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
   const {username, password} = req.body;
   const user = new User ({
     username: username,
     password: password
   })
-  //console.log(req.sessionID)
-  //console.log(req.user)
-  passport.authenticate('local')(req,res, ()=>{
+    passport.authenticate('local')(req,res, ()=>{
     res.json({state: req.isAuthenticated()})
     })
-    //console.log(req.isAuthenticated())
+
 }
 
 const logoutController = (req,res)=>{
@@ -86,12 +83,10 @@ const submitController = async (req,res)=>{
 
 const feedController = async (req,res)=>{
   const state = req.isAuthenticated();
-  //console.log(req.user);
   const posts = await Post.find({})
   .populate('author', ['username'])
   .sort({createdAt:-1}).
   limit(20);
-  //console.log(req.user);
   res.json({posts, state: state, user: req.user});
 }
 
@@ -126,7 +121,6 @@ const {id, title, summary, content} = req.body;
 const post = await Post.findById(id);
 if(post.author._id.toString() === req.user.id){
   try{
-    console.log("works")
     await Post.updateOne({_id:id}, {$set: req.body, image: newPath? newPath: post.image}).then(
       updatedArticle=>{
         res.json(updatedArticle);
@@ -137,9 +131,6 @@ if(post.author._id.toString() === req.user.id){
   }
   
 }
-//console.log(post.author._id.toString())
-
-
 }
 
 

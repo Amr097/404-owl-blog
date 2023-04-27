@@ -14,7 +14,7 @@ const Route = require("./routes/Routes.js");
 
 const app = express();
 
-const port = 4000;
+const port = process.env.PORT;
 
 
 
@@ -47,7 +47,12 @@ app.use('/uploads', express.static(__dirname + "/uploads"));
 
 app.use(Route);
 
+if(process.env.URI){
+   mongoose.connect(process.env.URI);
+}
 
-mongoose.connect(process.env.URI);
+if(port){
+    app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+}
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+module.exports = app;
