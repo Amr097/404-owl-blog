@@ -36,7 +36,7 @@ useEffect(()=>{
             {status.state && (
                 <>
                 <Link to="/blog" className="nav-icon create-blog">New Blog</Link>
-                <a href="" onClick={()=>{onLogout(setStatus)}} className="nav-icon">Logout</a>  
+                <a href="" onClick={(event)=>{onLogout(setStatus, event)}} className="nav-icon">Logout</a>  
                 </>
             )}
             {!status.state && (<>
