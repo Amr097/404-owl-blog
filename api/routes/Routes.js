@@ -1,7 +1,8 @@
 const express = require('express');
 const multer = require('multer');
+const {S3Client} = require('@aws-sdk/client-s3')
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: '/tmp' });
 
 const {
     registerController,
@@ -25,13 +26,17 @@ router.get('/logout', logoutController);
 
 router.get('/profile', profileController);
 
-router.post('/submit', upload.single('file'), submitController);
+router.post('/submit', 
+upload.single('file'), 
+submitController);
 
 router.get('/feed', feedController);
 
 router.get('/post/:id', getPostController);
 
-router.patch('/update', upload.single('file'), updateController);
+router.patch('/update', 
+upload.single('file'), 
+updateController);
 
 router.delete('/delete/:id', deleteController);
 

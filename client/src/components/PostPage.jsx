@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import {format} from "date-fns"
 import { StateContext } from "../StateContext";
 import { Navigate } from "react-router-dom";
-
+import { Image } from "../functions/image";
 
 
 
@@ -77,7 +77,7 @@ else{
         <h2>{postInfo.title}</h2>
         <p className="single-summary">{postInfo.summary}</p>
         <div className="single-image">
-        <img src={"http://localhost:4000/" + postInfo.image}/>
+        <Image src={postInfo.image}/>
         </div>
         <p className="single-content" dangerouslySetInnerHTML={{__html:postInfo.content}}/>
         </section>

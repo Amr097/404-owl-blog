@@ -30,7 +30,7 @@ useEffect(()=>{
 }, [])
 
     return(
-        <header className={color && "header-bg"}>
+        <header className={color? "header-bg" : null}>
             <Link to="/" className="Logo" onClick={scrollTop}>404 <span>Owl</span></Link>
             <nav>
             {status.state && (

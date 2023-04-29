@@ -1,5 +1,8 @@
 {
+    "buildCommand": "cd client && npm install && serve -s build",
+    "outputDirectory": "client/build",
     "rewrites": [
-        {"source":"(.*)"}
+        {"source":"/api/(.*)",
+          "distination" : "/api/api.js" }
     ]
 }

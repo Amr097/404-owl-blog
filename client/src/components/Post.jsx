@@ -1,6 +1,7 @@
 import React from "react";
 import {format} from "date-fns"
 import { Link } from "react-router-dom";
+import { Image } from "../functions/image";
 
 const Post = ({summary, title, image, createdAt, updatedAt, content, author, _id})=>{
     //console.log(createdAt)
@@ -9,7 +10,7 @@ const Post = ({summary, title, image, createdAt, updatedAt, content, author, _id
 
         <div className="image">
         <Link to={`/post/${_id}`}>
-        <img src={"http://localhost:4000/"+image} alt=""/>
+        <Image src={image} alt=''/>
         </Link>
         </div>
        

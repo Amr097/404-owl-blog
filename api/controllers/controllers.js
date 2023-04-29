@@ -1,10 +1,18 @@
+require('dotenv').config();
 const passport = require("passport");
 const {User} = require("../models/User");
 const fs = require('fs');
 const Post = require("../models/post");
+const { S3Client } = require("@aws-sdk/client-s3");
+const uploadToS3 = require("../uploadTos3");
+const mongoose = require('mongoose');
 
 
 const registerController=  (req,res)=>{
+  if(process.env.URI){
+    mongoose.connect(process.env.URI);
+ }
+
    const {username, password} = req.body;
    
    try{ 
@@ -24,6 +32,10 @@ const registerController=  (req,res)=>{
 } 
 
 const loginController = (req,res)=>{
+
+  if(process.env.URI){
+    mongoose.connect(process.env.URI);
+ }
   const {username, password} = req.body;
   const user = new User ({
     username: username,
@@ -36,6 +48,11 @@ const loginController = (req,res)=>{
 }
 
 const logoutController = (req,res)=>{
+
+  if(process.env.URI){
+    mongoose.connect(process.env.URI);
+ }
+
   req.logOut(err=>{
     if(err){
       console.log(err);
@@ -46,6 +63,11 @@ res.json(req.isAuthenticated());
 }
 
 const profileController = async (req,res)=>{
+ 
+  if(process.env.URI){
+    mongoose.connect(process.env.URI);
+ }
+
   try{
        
     if(req.user){
@@ -65,32 +87,51 @@ const profileController = async (req,res)=>{
 }
 
 const submitController = async (req,res)=>{
+
+  if(process.env.URI){
+    mongoose.connect(process.env.URI);
+ }
+
    if(req.isAuthenticated){
 
     const {title, summary, content} = req.body;
-    const {path, originalname}= req.file;
+    const {path, originalname, mimetype}= req.file;
     const parts = originalname.split('.');
     const ext = parts[parts.length - 1];
-    const newPath = path+'.'+ext;
-    fs.renameSync(path, newPath);
+    //const newPath = path+'.'+ext;
+    const newPath = Date.now()+'.'+ext;
+   //fs.renameSync(path, newPath);
+   const awsPath = await uploadToS3(path, mimetype, newPath);
     const newPost = await Post.create(
-      {title: title, summary: summary, content: content, image: newPath, author: req.user.id});
+      {title: title, summary: summary, content: content, image: awsPath, author: req.user.id});
     
-      res.json(newPost);  
+    //console.log(awsPath)
+       res.json(awsPath);  
    }
    
 }
 
 const feedController = async (req,res)=>{
+
+  if(process.env.URI){
+    mongoose.connect(process.env.URI);
+ }
+
   const state = req.isAuthenticated();
   const posts = await Post.find({})
   .populate('author', ['username'])
   .sort({createdAt:-1}).
   limit(20);
+  //console.log(posts)
   res.json({posts, state: state, user: req.user});
 }
 
 const getPostController = async (req,res)=>{
+
+  if(process.env.URI){
+    mongoose.connect(process.env.URI);
+ }
+
   if(req.isAuthenticated){
     const state= req.isAuthenticated();
     const id = req.params.id
@@ -98,15 +139,16 @@ const getPostController = async (req,res)=>{
   if(findPost){
   const post = await findPost.populate('author', ['username']);
   res.json({post, state});
-  }
-
-   
-   
-   
+  } 
   }
 }
 
 const updateController = async (req,res)=>{
+
+  if(process.env.URI){
+    mongoose.connect(process.env.URI);
+ }
+
 let newPath = null;
 if(req.file){
     const {path, originalname}= req.file;
@@ -135,6 +177,11 @@ if(post.author._id.toString() === req.user.id){
 
 
 const deleteController= async (req,res)=>{
+
+  if(process.env.URI){
+    mongoose.connect(process.env.URI);
+ }
+
   await Post.findById(req.params.id).then(post=>{
     if(post){
       post.deleteOne({id: req.params.id})
