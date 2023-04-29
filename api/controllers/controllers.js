@@ -8,10 +8,10 @@ const uploadToS3 = require("../uploadTos3");
 const mongoose = require('mongoose');
 
 
-const registerController=  (req,res)=>{
-  if(process.env.URI){
-    mongoose.connect(process.env.URI);
- }
+const registerController= async (req,res)=>{
+  
+   await mongoose.connect(process.env.URI);
+ 
 
    const {username, password} = req.body;
    
@@ -31,11 +31,11 @@ const registerController=  (req,res)=>{
           
 } 
 
-const loginController = (req,res)=>{
+const loginController = async (req,res)=>{
 
-  if(process.env.URI){
-    mongoose.connect(process.env.URI);
- }
+  
+   await mongoose.connect(process.env.URI);
+ 
   const {username, password} = req.body;
   const user = new User ({
     username: username,
@@ -47,11 +47,11 @@ const loginController = (req,res)=>{
 
 }
 
-const logoutController = (req,res)=>{
+const logoutController = async (req,res)=>{
 
-  if(process.env.URI){
-    mongoose.connect(process.env.URI);
- }
+
+   await mongoose.connect(process.env.URI);
+ 
 
   req.logOut(err=>{
     if(err){
@@ -64,9 +64,9 @@ res.json(req.isAuthenticated());
 
 const profileController = async (req,res)=>{
  
-  if(process.env.URI){
-    mongoose.connect(process.env.URI);
- }
+  
+ await   mongoose.connect(process.env.URI);
+ 
 
   try{
        
@@ -88,9 +88,9 @@ const profileController = async (req,res)=>{
 
 const submitController = async (req,res)=>{
 
-  if(process.env.URI){
-    mongoose.connect(process.env.URI);
- }
+ 
+  await  mongoose.connect(process.env.URI);
+ 
 
    if(req.isAuthenticated){
 
@@ -113,9 +113,9 @@ const submitController = async (req,res)=>{
 
 const feedController = async (req,res)=>{
 
-  if(process.env.URI){
-    mongoose.connect(process.env.URI);
- }
+  
+  await  mongoose.connect(process.env.URI);
+ 
 
   const state = req.isAuthenticated();
   const posts = await Post.find({})
@@ -128,9 +128,9 @@ const feedController = async (req,res)=>{
 
 const getPostController = async (req,res)=>{
 
-  if(process.env.URI){
-    mongoose.connect(process.env.URI);
- }
+  
+   await  mongoose.connect(process.env.URI);
+ 
 
   if(req.isAuthenticated){
     const state= req.isAuthenticated();
@@ -145,9 +145,9 @@ const getPostController = async (req,res)=>{
 
 const updateController = async (req,res)=>{
 
-  if(process.env.URI){
-    mongoose.connect(process.env.URI);
- }
+  
+  await  mongoose.connect(process.env.URI);
+ 
 
 let newPath = null;
 if(req.file){
@@ -178,9 +178,9 @@ if(post.author._id.toString() === req.user.id){
 
 const deleteController= async (req,res)=>{
 
-  if(process.env.URI){
-    mongoose.connect(process.env.URI);
- }
+ 
+   await  mongoose.connect(process.env.URI);
+ 
 
   await Post.findById(req.params.id).then(post=>{
     if(post){
