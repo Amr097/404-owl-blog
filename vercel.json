@@ -3,6 +3,6 @@
     "outputDirectory": "client/build",
     "rewrites": [
         {"source":"/api/(.*)",
-          "distination" : "/api/api.js" }
+          "destination" : "/api/api.js" }
     ]
 }
