@@ -14,7 +14,7 @@ const Route = require("./routes/Routes.js");
 
 const app = express();
 
-const port = process.env.POR;
+//const port = process.env.POR;
 
 
 
