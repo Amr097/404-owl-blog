@@ -63,7 +63,6 @@ res.json(req.isAuthenticated());
 }
 
 const profileController = async (req,res)=>{
- 
   
  await   mongoose.connect(process.env.URI);
  
@@ -113,7 +112,6 @@ const submitController = async (req,res)=>{
 
 const feedController = async (req,res)=>{
 
-  
   await  mongoose.connect(process.env.URI);
  
 
@@ -151,19 +149,19 @@ const updateController = async (req,res)=>{
 
 let newPath = null;
 if(req.file){
-    const {path, originalname}= req.file;
+    const {path, originalname, mimetype}= req.file;
     const parts = originalname.split('.');
     const ext = parts[parts.length - 1];
     newPath = path+'.'+ext;
-    fs.renameSync(path, newPath);
-}
-
-const {id, title, summary, content} = req.body;
+    newPath = Date.now()+'.'+ext;
+   //fs.renameSync(path, newPath);
+   const awsPath = await uploadToS3(path, mimetype, newPath);
+   const {id, title, summary, content} = req.body;
 
 const post = await Post.findById(id);
 if(post.author._id.toString() === req.user.id){
   try{
-    await Post.updateOne({_id:id}, {$set: req.body, image: newPath? newPath: post.image}).then(
+    await Post.updateOne({_id:id}, {$set: req.body, image: awsPath? awsPath: post.image}).then(
       updatedArticle=>{
         res.json(updatedArticle);
       });
@@ -176,10 +174,13 @@ if(post.author._id.toString() === req.user.id){
 }
 
 
+}
+
+
 const deleteController= async (req,res)=>{
 
  
-   await  mongoose.connect(process.env.URI);
+   await mongoose.connect(process.env.URI);
  
 
   await Post.findById(req.params.id).then(post=>{

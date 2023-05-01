@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Post from "./Post";
 import { StateContext } from "../StateContext";
 import Footer from "./Footer";
+import DefaultPost from "./DefaultPost";
 
 
 const Home = ()=>{
@@ -34,9 +35,9 @@ const Home = ()=>{
             </div>
         </section>
         <section className="post">
-       {feed.length>0 && feed.map((post, index)=>(
+       {feed.length>0?feed.map((post, index)=>(
             <Post key={index} {...post} />
-        ))}
+        )) : <DefaultPost />}
         </section>
         <Footer />
         </>

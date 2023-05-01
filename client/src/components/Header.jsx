@@ -9,8 +9,7 @@ const Header = ()=>{
 
 const {status, setStatus} = useContext(StateContext);
 const [color, setColor] = useState(false);
-console.log(status.state);
-console.log(status);
+
 const changeColor = ()=>{
     if(window.scrollY>=450){
       setColor(true);
