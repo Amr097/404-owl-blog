@@ -1,13 +1,11 @@
 # 404 Owl Blog App
-Full-Stack blogging platform built with React, Express, NodeJs && MongoDB.
+Blogging platform api built with NodeJs, Express && MongoDB provided with simple React interface to see the application in action.
 
 
 ## Features
 - Create , Update , Delete, Read blogs
 - Safely register to the app, the user's password is saved hashed and salted to the database.
 -User Authentication
-- Markdown Editor - Make changes, See changes: Instantly see what your Markdown documents look like in HTML    whilst typing .
-- Sync Scrolling While you type, LivePreview will automatically scroll to the current location.
 
 
 # Installation
