@@ -5,7 +5,8 @@ Blogging platform api built with NodeJs, Express && MongoDB provided with simple
 ## Features
 - Create , Update , Delete, Read blogs
 - Safely register to the app, the user's password is saved hashed and salted to the database.
--User Authentication
+-Session based User Authentication/Password hashing && salting with PassportJs.
+-Used Amazon S3 Cloud service for files storage.
 
 
 # Installation
